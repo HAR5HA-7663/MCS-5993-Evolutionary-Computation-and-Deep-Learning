@@ -1,0 +1,155 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+*.ipynb_checkpoints
+profile_default/
+ipython_config.py
+
+# Data files (uncomment if you want to ignore specific data)
+*.csv
+*.xlsx
+*.xls
+*.json
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.npy
+*.npz
+
+# Large dataset files
+WeatherJena.csv
+jena_climate_2009_2016.csv
+AirQualityUCI.csv
+
+# Model checkpoints and weights
+*.h5
+*.keras
+*.pb
+checkpoints/
+saved_models/
+models/
+*.weights.h5
+*.ckpt
+*.pth
+*.pt
+
+# TensorFlow/Keras
+logs/
+tf_logs/
+tensorboard/
+*.tfrecord
+*.index
+*.data-*
+checkpoint
+
+# PyTorch
+*.pth
+*.pt
+
+# Plots and figures
+
+*.jpg
+*.jpeg
+
+*.svg
+figures/
+plots/
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+*.out
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# GPU/CUDA
+*.cudnn
+*.nccl
+
+# Experiment tracking
+mlruns/
+.mlflow/
+wandb/
+.neptune/
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# LaTeX (if generating reports)
+*.aux
+*.lof
+*.lot
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+
+# Jupyter notebook execution results (optional - uncomment to keep notebooks clean)
+# *-checkpoint.ipynb
+
+# Specific to your project
+modules/__pycache__/
+Examples/__pycache__/
+Assignments/__pycache__/
+Extra_credit/__pycache__/
