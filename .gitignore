@@ -55,6 +55,9 @@ WeatherJena.csv
 jena_climate_2009_2016.csv
 AirQualityUCI.csv
 
+# Term project dataset folder (large image dataset)
+Term-project[Deep Food image classifier]/Dataset/
+
 # Model checkpoints and weights
 *.h5
 *.keras
