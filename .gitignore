@@ -40,9 +40,18 @@ ipython_config.py
 
 # Data files (uncomment if you want to ignore specific data)
 *.csv
+!baseline_history.csv
+!baseline_lr_tracking.csv
+!final_comparison_all_methods.csv
+!keras_tuner_history.csv
+!model_comparison.csv
+!optimized_model_history.csv
+!es_1plus1_history.csv
+!keras_tuner_best_hp.csv
 *.xlsx
 *.xls
 *.json
+!trial.json
 *.h5
 *.hdf5
 *.pkl
@@ -84,10 +93,14 @@ checkpoint
 *.pt
 
 # Plots and figures
-
+*.png
+!baseline_confusion_matrix.png
+!es_1plus1_optimization.png
+!keras_tuner_confusion_matrix.png
+!optimized_confusion_matrix.png
+!comprehensive_comparison_all_methods.png
 *.jpg
 *.jpeg
-
 *.svg
 figures/
 plots/

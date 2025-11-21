@@ -1,0 +1,4 @@
+Method,Test Accuracy,Improvement over Baseline,Improvement (%)
+Baseline CNN,0.738,0.0,0.0
+ES(1+1) Optimized,0.7979999780654907,0.05999997806549073,8.130078328657287
+Keras Tuner (Hyperband),0.7926666736602783,0.05466667366027833,7.40740835505127

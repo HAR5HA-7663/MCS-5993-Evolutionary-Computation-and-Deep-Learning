@@ -1,0 +1,2 @@
+learning_rate,dropout_rate,label_smoothing,rotation_range,zoom_range
+0.001409487675992029,0.30000000000000004,0.28,0.05,0.1
