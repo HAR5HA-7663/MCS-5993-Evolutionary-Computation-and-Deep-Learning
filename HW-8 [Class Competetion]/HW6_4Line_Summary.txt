@@ -1,0 +1,10 @@
+HW6 Algorithm Implementation Summary (4 Lines):
+
+1. My algorithm uses a (μ+λ) Evolution Strategy with a dual step-size system: a global step size σ_g adapted via the 1/5 success rule, combined with local step sizes σ_local (one per dimension) learned from the covariance matrix of the parent population.
+
+2. The mutation uses per-dimension step sizes computed as step_sizes = σ_g × σ_local, allowing each dimension to adapt independently based on the population's variance and correlation structure, enabling better handling of functions with different sensitivities per dimension.
+
+3. Local step sizes are updated each generation by analyzing the covariance and correlation matrix of the μ best parents, where dimensions with higher correlation to others receive increased mutation rates, while dimensions with low variance get reduced mutation for fine-tuning near optima.
+
+4. The competition wrapper performs 2-3 independent restarts with adaptive population sizes (larger for bigger search spaces), returning the best result across all restarts to increase robustness and avoid local minima.
+
