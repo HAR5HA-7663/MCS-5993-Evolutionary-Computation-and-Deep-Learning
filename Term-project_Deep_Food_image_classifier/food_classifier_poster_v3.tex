@@ -1,0 +1,194 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Single Page Research Poster using beamerposter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[final]{beamer}
+\usepackage[scale=1.0,size=a0,orientation=landscape]{beamerposter}
+\usetheme{default}
+
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+
+\definecolor{headerblue}{RGB}{0, 84, 147}
+\definecolor{boxblue}{RGB}{0, 84, 147}
+
+\tcbset{
+    posterbox/.style={
+        colback=white,
+        colframe=boxblue,
+        fonttitle=\bfseries\normalsize,
+        coltitle=white,
+        colbacktitle=boxblue,
+        boxrule=1pt,
+        arc=2pt,
+        left=1mm,right=1mm,top=1mm,bottom=1mm,
+    }
+}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{background canvas}{bg=white}
+
+\begin{document}
+\begin{frame}[t]
+
+%% HEADER
+\begin{columns}[T]
+\begin{column}{0.10\textwidth}
+\includegraphics[width=\textwidth]{LTU_logo.png}
+\end{column}
+\begin{column}{0.78\textwidth}
+\centering
+{\huge\bfseries\color{headerblue} Deep Food Image Classifier: Comparing}\\[2mm]
+{\huge\bfseries\color{headerblue} Evolutionary Hyperparameter Optimization Methods}\\[4mm]
+{\normalsize V Harsha Vardhan Yellela, MCS Candidate; CJ Chung, PhD, Professor}\\[1mm]
+{\small College of Arts \& Science, Lawrence Technological University}
+\end{column}
+\begin{column}{0.10\textwidth}
+\includegraphics[width=\textwidth]{LTU_seal.png}
+\end{column}
+\end{columns}
+
+\vspace{2mm}
+
+%% CNN ARCHITECTURE - FULL WIDTH
+\begin{tcolorbox}[posterbox, title=CNN ARCHITECTURE \hfill Total Parameters: $\sim$20.6M]
+\centering
+\includegraphics[width=0.75\textwidth]{cnn_architecture.png}
+\end{tcolorbox}
+
+\vspace{2mm}
+
+%% THREE COLUMNS
+\begin{columns}[T]
+
+%% LEFT COLUMN
+\begin{column}{0.32\textwidth}
+
+\begin{tcolorbox}[posterbox, title=ABSTRACT]
+\footnotesize
+Compares three HPO methods: ES(1+1), Keras Tuner Hyperband, DEAP ($\mu$+$\lambda$)-ES for a 10-class American food classifier. Achieves \textbf{79.8\% accuracy}—\textbf{24\% improvement} over baseline. Uses dual RTX 3090 GPUs, 10,000 images, optimizes 5 hyperparameters.
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=INTRODUCTION]
+\centering
+\includegraphics[width=0.98\textwidth]{food_samples.png}\\
+{\tiny Figure: 10 American food classes from Food-101}
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=DATASET]
+\footnotesize
+\textbf{Source:} Food-101 (10 classes) $\bullet$ 10,000 images $\bullet$ 224×224\\
+\textbf{Split:} Train 70\% / Val 15\% / Test 15\%\\
+\textbf{Augmentation:} Flip, Rotation, Zoom, Contrast
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=HPO METHODS]
+\footnotesize
+\textbf{Baseline:} Fixed LR=0.002, Dropout=0.25\\
+\textbf{ES(1+1):} Gaussian mutation, 1/5 rule, 15 gen\\
+\textbf{Keras Tuner:} Hyperband, 174 trials\\
+\textbf{DEAP:} ($\mu$+$\lambda$)-ES, $\mu$=5, $\lambda$=10
+\end{tcolorbox}
+
+\end{column}
+
+%% MIDDLE COLUMN
+\begin{column}{0.32\textwidth}
+
+\begin{tcolorbox}[posterbox, title=HYPERPARAMETER OPTIMIZATION]
+\footnotesize
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Parameter} & \textbf{Range} & \textbf{Type} \\
+\hline
+Learning Rate & $[10^{-5}, 10^{-2}]$ & Log \\
+Dropout & $[0.1, 0.5]$ & Linear \\
+Label Smoothing & $[0.0, 0.3]$ & Linear \\
+Rotation & $[0.0, 0.2]$ & Linear \\
+Zoom & $[0.0, 0.3]$ & Linear \\
+\hline
+\end{tabular}\\[1mm]
+\includegraphics[width=0.95\textwidth]{es_convergence.png}\\
+{\tiny ES(1+1) Fitness Evolution over 15 Generations}
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=RESULTS]
+\footnotesize
+\centering
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Method} & \textbf{Acc.} & \textbf{Gain} \\
+\hline
+Baseline & 64.4\% & --- \\
+\textbf{ES(1+1)} & \textbf{79.8\%} & \textbf{+24\%} \\
+Keras Tuner & 79.3\% & +23\% \\
+DEAP & 79.3\% & +23\% \\
+\hline
+\end{tabular}\\[1mm]
+\includegraphics[width=0.95\textwidth]{accuracy_comparison.png}\\
+{\tiny Test Accuracy Comparison}
+\end{tcolorbox}
+
+\end{column}
+
+%% RIGHT COLUMN
+\begin{column}{0.32\textwidth}
+
+\begin{tcolorbox}[posterbox, title=KEY FINDINGS]
+\footnotesize
+$\bullet$ All HPO methods achieved $\sim$79\% accuracy\\
+$\bullet$ ES(1+1) slightly outperformed library methods\\
+$\bullet$ Label smoothing critical: 0.05 $\rightarrow$ 0.30\\
+$\bullet$ Optimal LR: $\sim$1.4$\times$10$^{-3}$\\
+$\bullet$ \textbf{24\% improvement} validates HPO importance
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=TRAINING CONFIGURATION]
+\footnotesize
+\textbf{HW:} 2$\times$RTX 3090, 48GB VRAM, WSL2 Ubuntu\\
+\textbf{SW:} TensorFlow 2.10, Mixed Precision, MirroredStrategy\\[1mm]
+\centering
+\includegraphics[width=0.95\textwidth]{training_curves.png}\\
+{\tiny ES(1+1) Optimized Model Training Curves}
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=CONCLUSION]
+\footnotesize
+$\bullet$ All HPO methods effective (23-24\% gain)\\
+$\bullet$ ES(1+1) competitive with library implementations\\
+$\bullet$ Label smoothing most impactful hyperparameter\\
+$\bullet$ Model deployed on HuggingFace Hub\\
+\textbf{Future:} Full Food-101, CMA-ES, NAS
+\end{tcolorbox}
+
+\vspace{1mm}
+
+\begin{tcolorbox}[posterbox, title=REFERENCES]
+\tiny
+1. Bossek et al. (2019). HPO Survey. \textit{arXiv:1907.10902}\\
+2. Li et al. (2018). Hyperband. \textit{JMLR}\\
+3. Fortin et al. (2012). DEAP. \textit{JMLR}\\
+4. He et al. (2016). Deep Residual Learning. \textit{CVPR}
+\end{tcolorbox}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+\end{document}

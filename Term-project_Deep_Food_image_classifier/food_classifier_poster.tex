@@ -1,0 +1,359 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% a0poster Landscape Poster
+% LaTeX Template
+% Deep Food Image Classifier with Evolutionary HPO
+%
+% Author: V. Harsha Vardhan Yellela
+% Course: MCS-5993 Evolutionary Computing & Deep Learning
+% Institution: Lawrence Technological University
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a0,landscape]{a0poster}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{multicol}
+\columnsep=50pt
+\renewcommand{\columnseprulecolor}{\color{LightBlue}}
+\columnseprule=3pt
+\usepackage[svgnames]{xcolor}
+\usepackage{times}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{booktabs}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{amsfonts, amsmath, amsthm, amssymb}
+\usepackage{wrapfig}
+\usepackage{placeins}
+\usepackage{titlesec}
+
+% Reduce spacing throughout
+\setlength{\parskip}{0pt}
+\setlength{\baselineskip}{1.05\baselineskip}
+\titlespacing*{\section}{0pt}{0.3em}{0.2em}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	POSTER HEADER 
+%----------------------------------------------------------------------------------------
+\begin{minipage}[b]{0.55\linewidth}
+\veryHuge \color{DarkOrange} \textbf{Deep Food Image Classifier: Comparing \\ Evolutionary Hyperparameter Optimization Methods} \color{Black}\\
+\LARGE\\V Harsha Vardhan Yellela, MCS Candidate
+\end{minipage}
+%
+\begin{minipage}[b]{0.25\linewidth}
+\color{DarkSlateGray}\Large \textbf{Contact Information:}\\
+Dept. of Mathematics and Computer Science\\
+Lawrence Technological University\\
+Science Building S121D\\
+\end{minipage}
+%
+\begin{minipage}[b]{0.18\linewidth}
+\includegraphics[width=20cm]{LTU2.png}
+\end{minipage}
+
+\vspace{1cm}
+
+%----------------------------------------------------------------------------------------
+\begin{multicols*}{4}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Abstract}
+\color{black}
+This work presents a comprehensive comparison of three hyperparameter optimization (HPO) methods for deep learning: hand-coded ES(1+1) Evolution Strategy, Keras Tuner Hyperband, and DEAP library-based ($\mu$+$\lambda$)-ES. We develop a 10-class American food image classifier using a custom ResNet-style CNN architecture with residual connections, achieving up to \textbf{79.8\% test accuracy}—a \textbf{24\% improvement} over the baseline. Our experiments demonstrate that evolutionary strategies can match or exceed gradient-free hyperparameter search methods while providing interpretable optimization trajectories. The system utilizes multi-GPU mixed-precision training on dual RTX 3090 GPUs, processes 10,000 images across 10 food categories, and optimizes 5 hyperparameters: learning rate, dropout rate, label smoothing, rotation range, and zoom range.
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Introduction}
+\color{Black}
+Hyperparameter optimization remains a critical challenge in deep learning, significantly impacting model performance. While grid search and random search are common approaches, evolutionary algorithms offer a principled way to explore the hyperparameter space efficiently.
+
+\begin{center}\vspace{-0.5cm}
+\includegraphics[width=0.85\linewidth]{food_samples.png}
+\captionof{figure}{\color{Teal}Sample images from our 10-class American food dataset: chicken wings, churros, french fries, hamburger, hot dog, ice cream, mac \& cheese, pancakes, pizza, waffles}
+\end{center}\vspace{-0.4cm}
+
+\textbf{Research Questions:}
+\begin{enumerate}
+    \item Can hand-coded ES(1+1) match library-based HPO methods?
+    \item How do different evolutionary strategies compare for CNN optimization?
+    \item What hyperparameters have the most impact on food classification?
+\end{enumerate}
+
+Our food classification system processes images in real-time, supports out-of-scope detection via confidence thresholding, and achieves inference times of 3-5 seconds per image on consumer hardware.
+
+%----------------------------------------------------------------------------------------
+%	DATASET
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Dataset}
+\color{Black}
+\textbf{Source:} Food-101 dataset (subset of 10 American food classes)
+
+\textbf{Statistics:} 10,000 images (1,000/class) $\bullet$ Train/Val/Test: 70\%/15\%/15\% $\bullet$ Size: 224$\times$224 RGB
+
+\textbf{Food Classes:}
+\begin{minipage}[t]{0.48\linewidth}
+\begin{enumerate}
+    \item Chicken Wings
+    \item Churros
+    \item French Fries
+    \item Hamburger
+    \item Hot Dog
+\end{enumerate}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\begin{enumerate}
+\setcounter{enumi}{5}
+    \item Ice Cream
+    \item Macaroni \& Cheese
+    \item Pancakes
+    \item Pizza
+    \item Waffles
+\end{enumerate}
+\end{minipage}
+
+\textbf{Data Augmentation:} Horizontal flip $\bullet$ Random rotation $\bullet$ Random zoom $\bullet$ Contrast adjustment
+
+%----------------------------------------------------------------------------------------
+%	METHODOLOGY
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Methodology}
+\color{Black}
+
+\textbf{CNN Architecture:} Custom ResNet-style with 4 residual blocks
+
+\begin{minipage}[t]{0.48\linewidth}
+\begin{itemize}
+    \item Initial Conv: 64 filters, 7$\times$7, stride 2
+    \item ResBlock 1: 64 $\rightarrow$ 128 ch
+    \item ResBlock 2: 128 $\rightarrow$ 256 ch
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\begin{itemize}
+    \item ResBlock 3: 256 $\rightarrow$ 512 ch
+    \item ResBlock 4: 512 $\rightarrow$ 1024 ch
+    \item GAP + Dense(1024) + Softmax(10)
+\end{itemize}
+\end{minipage}
+
+\textbf{Total Parameters:} $\sim$20.6M
+
+\begin{center}\vspace{-0.3cm}
+\includegraphics[width=0.85\linewidth]{cnn_architecture.png}
+\captionof{figure}{\color{Teal}ResNet-style CNN Architecture with Residual Connections}
+\end{center}\vspace{-0.3cm}
+
+\textbf{Hyperparameters Optimized:}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Parameter} & \textbf{Range} & \textbf{Type} \\
+\hline
+Learning Rate & $[10^{-5}, 10^{-2}]$ & Log \\
+Dropout Rate & $[0.1, 0.5]$ & Linear \\
+Label Smoothing & $[0.0, 0.3]$ & Linear \\
+Rotation/Zoom & $[0.0, 0.2/0.3]$ & Linear \\
+\hline
+\end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	HPO METHODS
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{HPO Methods Compared}
+\color{Black}
+
+\textbf{1. Baseline CNN:} Fixed HP (LR=0.002, Dropout=0.25), 50 epochs
+
+\textbf{2. ES(1+1) - Hand-coded:}
+\begin{itemize}
+    \item Single parent, single offspring strategy
+    \item Gaussian mutation with 1/5th success rule
+    \item $\sigma$ adaptation: $\sigma \leftarrow \sigma \cdot e^{\pm 0.2}$
+    \item 8 generations, 30 epochs per evaluation
+\end{itemize}
+
+\textbf{3. Keras Tuner (Hyperband):} Successive halving, Factor=3, 174 trials
+
+\textbf{4. DEAP ($\mu$+$\lambda$)-ES:} Population $\mu$=5, $\lambda$=8, 5 generations
+
+\begin{center}\vspace{-0.3cm}
+\includegraphics[width=0.85\linewidth]{es_convergence.png}
+\captionof{figure}{\color{Teal}ES(1+1) Fitness Convergence over Generations}
+\end{center}\vspace{-0.3cm}
+
+%----------------------------------------------------------------------------------------
+%	RESULTS
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Results}
+\color{Black}
+
+\textbf{Test Accuracy Comparison:}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Method} & \textbf{Test Acc.} & \textbf{Improvement} \\
+\hline
+Baseline CNN & 64.37\% & --- \\
+\hline
+ES(1+1) & \textbf{79.80\%} & \textbf{+23.97\%} \\
+\hline
+Keras Tuner & 79.27\% & +23.14\% \\
+\hline
+DEAP ($\mu$+$\lambda$) & 79.33\% & +23.25\% \\
+\hline
+\end{tabular}
+\captionof{table}{\color{Teal}Performance Comparison of All Methods}
+\end{center}
+
+\begin{center}\vspace{-0.3cm}
+\includegraphics[width=0.85\linewidth]{accuracy_comparison.png}
+\captionof{figure}{\color{Teal}Test Accuracy Comparison: All Four Methods}
+\end{center}\vspace{-0.3cm}
+
+\textbf{Optimized Hyperparameters:}
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{HP} & \textbf{Base} & \textbf{ES(1+1)} & \textbf{Tuner} & \textbf{DEAP} \\
+\hline
+LR & 2e-3 & 1.38e-3 & 1.41e-3 & 9.86e-5 \\
+\hline
+Dropout & 0.25 & 0.256 & 0.30 & 0.10 \\
+\hline
+Label Sm. & 0.05 & 0.30 & 0.28 & 0.077 \\
+\hline
+Rotation & 0.05 & 0.066 & 0.05 & 0.031 \\
+\hline
+Zoom & 0.10 & 0.114 & 0.10 & 0.327 \\
+\hline
+\end{tabular}
+\captionof{table}{\color{Teal}Optimized Hyperparameters by Method}
+\end{center}
+
+\begin{center}\vspace{-0.3cm}
+\includegraphics[width=0.85\linewidth]{hyperparameter_comparison.png}
+\captionof{figure}{\color{Teal}Hyperparameter Values Across Methods}
+\end{center}\vspace{-0.3cm}
+
+\textbf{Key Findings:}
+\begin{itemize}
+    \item All three HPO methods achieved similar performance ($\sim$79\%)
+    \item Hand-coded ES(1+1) slightly outperformed library methods
+    \item Label smoothing had significant impact (0.05 $\rightarrow$ 0.28-0.30)
+    \item Learning rate convergence: $\sim$1.4$\times$10$^{-3}$ optimal
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%	TRAINING DETAILS
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Training Configuration}
+\color{Black}
+
+\begin{minipage}[t]{0.48\linewidth}
+\textbf{Hardware:}
+\begin{itemize}
+    \item 2$\times$ NVIDIA RTX 3090 (48GB)
+    \item 21GB System RAM + 8GB Swap
+    \item WSL2 Ubuntu environment
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\linewidth}
+\textbf{Software:}
+\begin{itemize}
+    \item TensorFlow 2.10 with Keras
+    \item Mixed Precision (float16)
+    \item MirroredStrategy for multi-GPU
+\end{itemize}
+\end{minipage}
+
+\textbf{Training Time:} Baseline: 1.5h $\bullet$ ES(1+1): 6-8h (8 gen) $\bullet$ Keras Tuner: 6h (174 trials) $\bullet$ DEAP: 4h (5 gen)
+
+\begin{center}\vspace{-0.3cm}
+\includegraphics[width=0.85\linewidth]{training_curves.png}
+\captionof{figure}{\color{Teal}Training and Validation Accuracy Curves}
+\end{center}\vspace{-0.3cm}
+
+%----------------------------------------------------------------------------------------
+%	INFERENCE
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Inference \& Deployment}
+\color{Black}
+
+\textbf{Out-of-Scope Detection:} Confidence threshold: 60\% $\bullet$ Predictions below threshold flagged as ``out of scope'' $\bullet$ Prevents misclassification of non-food images
+
+\textbf{Model Deployment:}
+\begin{itemize}
+    \item Hugging Face Hub: \texttt{HAR5HA-YELLELA/american\_food\_classifier}
+    \item Inference: 3-5 seconds $\bullet$ Memory: 4-5 GB VRAM
+\end{itemize}
+
+\begin{center}\vspace{-0.3cm}
+\includegraphics[width=0.85\linewidth]{inference_example.png}
+\captionof{figure}{\color{Teal}Inference Example: Churros classified with 75.1\% confidence}
+\end{center}\vspace{-0.3cm}
+
+%----------------------------------------------------------------------------------------
+%	CONCLUSION
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Conclusion}
+\color{Black}
+
+\begin{itemize}
+    \item \textbf{All HPO methods effective:} 23-24\% improvement over baseline
+    \item \textbf{ES(1+1) competitive:} Hand-coded implementation matched library methods
+    \item \textbf{Label smoothing critical:} Increased from 0.05 to 0.28-0.30
+    \item \textbf{Evolutionary strategies viable:} For CNN hyperparameter optimization
+    \item \textbf{Practical deployment:} Model available on Hugging Face Hub
+\end{itemize}
+
+\textbf{Recommendations:} 1. Use ES(1+1) for simplicity 2. Keras Tuner for extensive search 3. DEAP for complex multi-objective optimization
+
+%----------------------------------------------------------------------------------------
+%	FUTURE WORK
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{Future Work}
+\color{Black}
+
+\begin{enumerate}
+    \item Extend to full Food-101 dataset (101 classes)
+    \item Implement CMA-ES for covariance matrix adaptation
+    \item Multi-objective optimization (accuracy vs. inference time)
+    \item Neural Architecture Search (NAS) with evolutionary methods
+\end{enumerate}
+
+%----------------------------------------------------------------------------------------
+%	REFERENCES
+%----------------------------------------------------------------------------------------
+\color{Teal}
+\section*{References}
+\color{Black}
+\small
+\begin{enumerate}
+    \item Bossek, J. et al. (2019). "A Survey on Hyperparameter Optimization." \textit{arXiv:1907.10902}
+    \item Li, L. et al. (2018). "Hyperband: A Novel Bandit-Based Approach." \textit{JMLR}
+    \item Fortin, F.A. et al. (2012). "DEAP: Evolutionary Algorithms Made Easy." \textit{JMLR}
+    \item He, K. et al. (2016). "Deep Residual Learning for Image Recognition." \textit{CVPR}
+\end{enumerate}
+
+\color{Teal}
+\end{multicols*}
+\end{document}
